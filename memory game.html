@@ -1,0 +1,200 @@
+<html>
+
+<head>
+    <style>
+         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .grid-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        button {
+            width: 100%;
+            height: 100%;
+            background-color: #eee;
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+        }
+
+        button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        button:hover img {
+            transform: scale(1.1);
+        }
+
+        button:active img {
+            transform: scale(0.9);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        .control-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .control-buttons button {
+            margin: 0 10px;
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .control-buttons button:hover {
+            background-color: #45a049;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .hide-images .grid-item img {
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-container hide-images">
+        <div class="grid-item"><button onclick="changeimage('i1')" id="1"><img id="i1" src="apple.jpg"
+                    alt="Umbrella"></button></div>
+        <div class="grid-item"><button onclick="changeimage('i2')" id="2"><img id="i2" src="banana.jpg " ></button>
+        </div>
+        <div class="grid-item"><button onclick="changeimage('i3')" id="3"><img id="i3" src="ice-cream.jpg"
+                    alt="Ice Cream"></button></div>
+        <div class="grid-item"><button onclick="changeimage('i7')" id="7"><img id="i7" src="ice-cream.jpg"
+                    alt="Butterfly"></button></div>
+        <div class="grid-item"><button onclick="changeimage('i8')" id="8"><img id="i8" src="apple.jpg"
+                    alt="Umbrella"></button></div>
+        <div class="grid-item"><button onclick="changeimage('i9')" id="9"><img id="i9" src="animal.jpg"></button>
+        </div>
+        <div class="grid-item"><button onclick="changeimage('i10')" id="10"><img id="i10" src="banana.jpg"
+                    alt="ship"></button></div>
+        <div class="grid-item"><button onclick="changeimage('i11')" id="11"><img id="i11" src="animal.jpg"
+                    alt="ship"></button></div>
+        <div class="grid-item"><button onclick="changeimage('i12')" id="12"><img id="i12" src="car.jpg"
+                    alt="Car"></button></div>
+        
+    </div>
+
+    <div class="control-buttons">
+        <button name="viewimage" onclick="viewimage()">View Images</button>
+        <button name="startgame" onclick="startgame()">Start Game</button>
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <script>
+        var image1, image2;
+        var imageclickevent = 0;
+        var point = 0;
+        var messageElement = document.getElementById("message");
+
+        function startgame() {
+            document.querySelectorAll('.grid-item img').forEach(img => {
+                img.style.visibility = "hidden";
+            });
+            image1 = "";
+            image2 = "";
+            imageclickevent = 0;
+            point = 0;
+            messageElement.textContent = "";
+        }
+
+        function viewimage() {
+            document.querySelector('.grid-container').classList.remove('hide-images');
+            setTimeout(() => {
+                document.querySelectorAll('.grid-item img').forEach(img => {
+                    img.style.visibility = "hidden";});
+                    document.querySelector('.grid-container').classList.add('hide-images');
+            }, 3000);
+        }
+
+        function changeimage(a) {
+            if (imageclickevent === 0) {
+                imagevisibility(a);
+                image1 = a;
+                imageclickevent = 1;
+            } else {
+                imagevisibility(a);
+                image2 = a;
+                setTimeout(() => {
+                    checkmatch(image1, image2);
+                }, 1000);
+                imageclickevent = 0;
+            }
+        }
+
+        function imagevisibility(b) {
+            document.getElementById(b).style.visibility = "visible";
+        }
+
+        function checkmatch(image1, image2) {
+            if ((image1 == "i1" && image2 == "i8") || (image1 == "i2" && image2 == "i10") || (image1 == "i3" && image2 == "i7") || (image1 == "i9" && image2 == "i11" || (image1 == "i8" && image2 == "i1") || (image1 == "i10" && image2 == "i2") || (image1 == "i7" && image2 == "i3") || (image1 == "i11" && image2 == "i9"))) {
+                point++;
+                messageElement.textContent = "Correct match. You have scored " + point;
+            } else {
+                messageElement.textContent = "Incorrect match. You have scored " + point;
+                setTimeout(() => {
+                    document.getElementById(image1).style.visibility = "hidden";
+                    document.getElementById(image2).style.visibility = "hidden";
+                }, 1000);
+            }
+            if (point == 4) {
+                messageElement.textContent = "Congratulations! You've won the game!";
+            }
+        }
+    </script>
+</body>
+
+</html>
